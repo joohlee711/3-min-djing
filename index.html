@@ -517,10 +517,10 @@
     .toast {
       position: absolute;
       left: 50%;
-      bottom: 6px;
+      top: 50%;
       transform: translateX(-50%);
       max-width: 80%;
-      padding: 6px 12px 7px;
+      padding: 8px 14px 9px;
       border-radius: 999px;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
       border: 1px solid rgba(148,163,184,0.85);
@@ -556,7 +556,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(3, 7, 18, 0.98));
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.55), rgba(3, 7, 18, 0.75));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -690,6 +690,7 @@
       .logo-title { font-size: 14px; }
       .dj-header { font-size: 11px; }
       .overlay-card { padding-inline: 14px; }
+      .toast { bottom: 70px; max-width: 90%;}
     }
   </style>
 </head>
@@ -933,14 +934,16 @@
             title: "오늘 만질 장비를 소개합니다.",
             body: `화면 아래 장비가 보이시죠?<br/>
 왼쪽이 <strong>현재 곡(Deck A)</strong>, 오른쪽이 <strong>다음 곡(Deck B)</strong>이에요.<br/><br/>
-지금은 Deck A가 <strong>곡의 중간쯤</strong>에서 재생되고 있다고 생각하시면 돼요.`,
+지금은 Deck A가 재생되고 있습니다.`,
             stepsText: "3 / 9",
           },
           4: {
             eyebrow: "튜토리얼 · Step 4",
-            title: "먼저 속도부터 정확히 맞추기",
-            body: `Deck B의 BPM이 127로 설정되어 있어요.<br/>
-슬라이더를 움직여 <strong>131</strong>로 맞춰보세요.`,
+            title: "속도는 이미 맞춰 놨어요",
+            body: `오른쪽 Deck B에 <strong>BPM 슬라이더</strong>가 보이시죠?<br/>
+          실제 디제잉에서는 이걸로 곡의 속도를 맞춥니다.<br/><br/>
+          이번 데모에서는 두 곡을 미리 <strong>같은 속도(131 BPM)</strong>로 렌더링해 뒀어요.<br/>
+          그래도 느낌을 익혀보기 위해, 슬라이더를 움직여 <strong>131</strong>에 딱 맞춰보세요.`,
             stepsText: "4 / 9",
           },
           5: {
@@ -948,9 +951,9 @@
             title: "좋은 타이밍에 두 번째 곡 넣기",
             body: `이제 Deck A는 곡의 한 지점을 향해 가고 있고,<br/>
 Deck B는 들어올 준비를 하고 있어요.<br/><br/>
-Deck A 타임라인의 <strong>빨간 표시</strong>가 다가오면,<br/>
+음악을 즐기시다가 Deck A 타임라인의 <strong>빨간 표시</strong>가 다가오면,<br/>
 그때 Deck B의 ▶ 버튼을 눌러주세요.<br/>
-이 스텝에서는 깔끔하게 들어가도록 자동으로 맞춰 드립니다.`,
+(이 스텝에서는 깔끔하게 들어가도록 자동으로 맞춰 드리니, 너무 긴장하지 마세요!)`,
             stepsText: "5 / 9",
           },
           6: {
@@ -983,8 +986,6 @@ Deck A의 볼륨을 슬슬 내려서 <strong>맨 아래</strong>까지 만들고
             title: "짝짝짝!! 디제이가 되신 걸 축하합니다 🎉",
             body: `<div class="celebrate">
 방금 하신 일은 실제 클럽에서 디제이가 하는 일과 <strong>거의 동일한 흐름</strong>이에요.<br/><br/>
-이제부터는 마음대로 만져보면서<br/>
-EQ와 볼륨을 가지고 <strong>자기만의 타이밍</strong>을 찾아보세요.<br/><br/>
 언젠가 진짜 장비를 만났을 때, 훨씬 덜 낯설게 느껴질 거예요 :)
 </div>`,
             stepsText: "완료",
@@ -1076,9 +1077,12 @@ For this demo, Deck A is playing around the <strong>middle of the track</strong>
           },
           4: {
             eyebrow: "Tutorial · Step 4",
-            title: "First job: match the tempo exactly",
-            body: `Deck B starts at 127 BPM.<br/>
-Move the slider to make it <strong>131</strong>.`,
+            title: "Tempo is already matched for you",
+            body: `See the <strong>BPM slider</strong> on Deck B?<br/>
+          On real gear, this is where you would match the tempo.<br/><br/>
+          In this demo, both tracks are already rendered at<br/>
+          <strong>the same tempo (131 BPM)</strong>.<br/>
+          Still, try moving the slider and landing exactly on <strong>131</strong> to get a feel for it.`,
             stepsText: "4 / 9",
           },
           5: {
@@ -1147,9 +1151,9 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
     };
 
     // --------- 상수: 시나리오용 타임 (초) ----------
-    const A_START = 59.6;       // Pipe Dream 시작 지점
-    const B_START = 15.2;       // Motion 시작 지점
-    const A_FLAG  = A_START + 20; // 믹스 포인트 (대충 중간 어딘가)
+    const A_START = 15;       // Pipe Dream 시작 지점
+    const B_START = 14.858;       // Motion 시작 지점
+    const A_FLAG  = 59.6; // 믹스 포인트 
 
     // --------- Audio & Web Audio ----------
     const audioA = document.getElementById("audioA");
@@ -1358,7 +1362,7 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
       isPlayingA = false;
       isPlayingB = false;
       audioA.currentTime = A_START;
-      audioB.currentTime = 0;
+      audioB.currentTime = B_START;
       audioB.playbackRate = 127 / 127; // 기본 1
       playA.classList.remove("playing");
       playA.textContent = "▶";
@@ -1611,13 +1615,22 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
       }
     });
 
-    playB.addEventListener("click", () => {
+    playB.addEventListener("click", async () => {
       ensureAudioContext();
       if (!isPlayingB) {
         if (awaitingSyncPlay) {
-          audioA.currentTime = A_FLAG;
-          audioB.currentTime = B_START;
+          // 이 타이밍에만 믹스 포인트로 점프
+          audioA.currentTime = A_FLAG;   // 59.6초
+          audioB.currentTime = B_START;  // 15.2초
+
+          if (!isPlayingA) {
+            audioA.play();
+            isPlayingA = true;
+            playA.classList.add("playing");
+            playA.textContent = "⏸";
+          }
         }
+
         audioB.play();
         isPlayingB = true;
         playB.classList.add("playing");
@@ -1627,6 +1640,7 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
           awaitingSyncPlay = false;
           const T = STRINGS[currentLang].toasts;
           showToast(T.syncDone);
+          await sleep(1000);
           showTutorialStep(6);
         }
       } else {
@@ -1636,6 +1650,7 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
         playB.textContent = "▶";
       }
     });
+
 
     // --------- 슬라이더 이벤트 ---------
 
@@ -1661,11 +1676,12 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
     const checkVolBStable = makeStableChecker(
       "volBStableTimer",
       () => awaitingBVolumeRaise && Number(volB.value) === 100,
-      () => {
+      async () => {
         awaitingBVolumeRaise = false;
         volB.classList.remove("highlight-control");
         const T = STRINGS[currentLang].toasts;
         showToast(T.volBDone);
+        await sleep(1000)
         showTutorialStep(7);
       }
     );
@@ -1675,14 +1691,14 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
       checkVolBStable();
     });
 
-    // BPM: 정확히 131이 된 상태 유지
     const checkBpmStable = makeStableChecker(
       "bpmStableTimer",
       () => awaitingBpm && Number(bpmB.value) === 131,
-      () => {
+      async () => {
         awaitingBpm = false;
         const T = STRINGS[currentLang].toasts;
         showToast(T.bpmPerfect);
+        await sleep(1000);
         showTutorialStep(5);
       }
     );
@@ -1690,8 +1706,8 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
     bpmB.addEventListener("input", (e) => {
       const bpmValue = Number(e.target.value);
       bpmBVal.textContent = bpmValue;
-      const rate = bpmValue / 127;
-      audioB.playbackRate = rate;
+      // 실제 오디오 재생 속도는 이미 131 BPM으로 렌더링되어 있어서
+      // 슬라이더는 '연습용' UI일 뿐입니다 :)
       checkBpmStable();
     });
 
@@ -1727,11 +1743,12 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
     const checkLowStable = makeStableChecker(
       "eqLowStableTimer",
       () => eqPhase === "low" && eqFullyUp(eqLow.value),
-      () => {
+      async () => {
         eqRowLow.classList.remove("eq-highlight");
         eqPhase = "done";
         const T = STRINGS[currentLang].toasts;
         showToast(T.eqLow);
+        await sleep(1000);
         showTutorialStep(8);
       }
     );
@@ -1769,22 +1786,14 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
       } else if (tutorialStep === 3) {
         showTutorialStep(4);
       } else if (tutorialStep === 4) {
-        // BPM 맞추는 단계 시작
-        hideTutorial();
+          hideTutorial();
         awaitingBpm = true;
         deckB.classList.add("highlight");
+        // BPM 맞추는 단계 시작
         showToast(T.bpmAsk);
       } else if (tutorialStep === 5) {
         // 타이밍 맞춰 B 시작
         hideTutorial();
-        audioA.currentTime = A_FLAG - 8;
-        audioB.currentTime = B_START;
-        if (!isPlayingA) {
-          audioA.play();
-          isPlayingA = true;
-          playA.classList.add("playing");
-          playA.textContent = "⏸";
-        }
         awaitingSyncPlay = true;
         waveA.classList.add("wave-highlight");
         waveB.classList.add("wave-highlight");
@@ -1801,7 +1810,6 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
         hideTutorial();
         eqPhase = "high";
         eqRowHigh.classList.add("eq-highlight");
-        showToast(STRINGS[currentLang].toasts.eqHigh);
       } else if (tutorialStep === 8) {
         // A 볼륨 페이드 단계
         hideTutorial();
@@ -1840,6 +1848,10 @@ Next time you see a DJ, you’ll know exactly what to listen for. :)
       applyEq();
       setLanguage("ko");
       showTutorialStep(1);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     window.addEventListener("load", init);
