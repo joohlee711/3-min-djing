@@ -515,27 +515,29 @@
 
     /* 말풍선 토스트 */
     .toast {
-      position: absolute;
+      position: fixed;
       left: 50%;
-      top: 50%;
-      transform: translateX(-50%);
-      max-width: 80%;
-      padding: 8px 14px 9px;
-      border-radius: 999px;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      padding: 10px 16px;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
       border: 1px solid rgba(148,163,184,0.85);
-      font-size: 11px;
+      border-radius: 999px;
       color: var(--text-main);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 13px;
+      max-width: 85%;
       text-align: center;
       box-shadow: 0 14px 30px rgba(15,23,42,0.9);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
-      z-index: 10;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
     }
+
+    .toast button {
+  font-size: 13px;
+  padding: 6px 10px;
+}
 
     .toast::after {
       content: "";
@@ -690,7 +692,12 @@
       .logo-title { font-size: 14px; }
       .dj-header { font-size: 11px; }
       .overlay-card { padding-inline: 14px; }
-      .toast { bottom: 70px; max-width: 90%;}
+      .toast {
+        font-size: 11px;
+        padding: 8px 12px;
+        max-width: 90%;
+        top: 40%; /* 모바일은 조금 더 위 */
+      }
     }
   </style>
 </head>
