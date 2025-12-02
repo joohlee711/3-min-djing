@@ -21,6 +21,10 @@
     }
 
     * { box-sizing: border-box; }
+    
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
 
     body {
       margin: 0;
@@ -517,35 +521,40 @@
     .toast {
       position: fixed;
       left: 50%;
-      top: 45%;
+      top: 40%;
       transform: translate(-50%, -50%);
-      padding: 10px 16px;
+      padding: 6px 12px; /* 세로 패딩 줄여서 납작하게 */
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
       border: 1px solid rgba(148,163,184,0.85);
       border-radius: 999px;
       color: var(--text-main);
       font-size: 13px;
-      max-width: 85%;
+      line-height: 1.2;          /* 세로 높이 강제 축소 */
+      max-width: 80%;
       text-align: center;
       box-shadow: 0 14px 30px rgba(15,23,42,0.9);
       opacity: 0;
       pointer-events: none;
       z-index: 9999;
       transition: opacity 0.3s ease;
+      display: inline-flex;
+      align-items: center;       /* 텍스트를 캡슐 가운데로 */
+      justify-content: center;
     }
 
+    /* 혹시 토스트 안에 버튼 쓸 경우를 대비한 사이즈 고정 */
     .toast button {
-  font-size: 13px;
-  padding: 6px 10px;
-}
+      font-size: 12px;
+      padding: 4px 8px;
+    }
 
     .toast::after {
       content: "";
       position: absolute;
-      bottom: -5px;
+      bottom: -4px; /* 꼬리 살짝 위로 */
       left: 50%;
       transform: translateX(-50%);
-      border-width: 5px 6px 0 6px;
+      border-width: 4px 5px 0 5px;
       border-style: solid;
       border-color: rgba(15,23,42,0.98) transparent transparent transparent;
     }
@@ -553,6 +562,7 @@
     .toast.visible {
       opacity: 1;
     }
+
 
     /* 오버레이 튜토리얼 */
     .overlay {
@@ -692,11 +702,12 @@
       .logo-title { font-size: 14px; }
       .dj-header { font-size: 11px; }
       .overlay-card { padding-inline: 14px; }
+
       .toast {
-        font-size: 11px;
-        padding: 8px 12px;
-        max-width: 90%;
-        top: 40%; /* 모바일은 조금 더 위 */
+        font-size: 11px;      /* 모바일에서 글자 살짝 줄임 */
+        padding: 5px 10px;    /* 세로 한 번 더 압축 */
+        max-width: 88%;
+        top: 35%;             /* 화면 좀 더 위쪽으로 */
       }
     }
   </style>
