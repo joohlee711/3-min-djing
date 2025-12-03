@@ -21,10 +21,7 @@
     }
 
     * { box-sizing: border-box; }
-    
-    html {
-      -webkit-text-size-adjust: 100%;
-    }
+    html { -webkit-text-size-adjust: 100%; }
 
     body {
       margin: 0;
@@ -230,7 +227,6 @@
       gap: 10px;
     }
 
-    /* 앨범 아트: 정사각형 */
     .disc {
       width: 52px;
       height: 52px;
@@ -275,7 +271,6 @@
       flex-wrap: wrap;
     }
 
-    /* 동그란 재생/정지 버튼 */
     .btn-circle {
       width: 32px;
       height: 32px;
@@ -375,7 +370,6 @@
       border: none;
     }
 
-    /* Waveforms */
     .wave-row {
       margin-top: 2px;
       display: flex;
@@ -465,7 +459,6 @@
       gap: 10px;
     }
 
-    /* EQ & Volumes */
     .eq {
       flex: 1 1 220px;
       display: flex;
@@ -517,19 +510,18 @@
 
     .volumes span strong { color: var(--accent); }
 
-    /* 말풍선 토스트 */
     .toast {
       position: fixed;
       left: 50%;
       top: 40%;
       transform: translate(-50%, -50%);
-      padding: 6px 12px; /* 세로 패딩 줄여서 납작하게 */
+      padding: 6px 12px;
       background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
       border: 1px solid rgba(148,163,184,0.85);
       border-radius: 999px;
       color: var(--text-main);
       font-size: 13px;
-      line-height: 1.2;          /* 세로 높이 강제 축소 */
+      line-height: 1.2;
       max-width: 80%;
       text-align: center;
       box-shadow: 0 14px 30px rgba(15,23,42,0.9);
@@ -538,11 +530,10 @@
       z-index: 9999;
       transition: opacity 0.3s ease;
       display: inline-flex;
-      align-items: center;       /* 텍스트를 캡슐 가운데로 */
+      align-items: center;
       justify-content: center;
     }
 
-    /* 혹시 토스트 안에 버튼 쓸 경우를 대비한 사이즈 고정 */
     .toast button {
       font-size: 12px;
       padding: 4px 8px;
@@ -551,7 +542,7 @@
     .toast::after {
       content: "";
       position: absolute;
-      bottom: -4px; /* 꼬리 살짝 위로 */
+      bottom: -4px;
       left: 50%;
       transform: translateX(-50%);
       border-width: 4px 5px 0 5px;
@@ -559,12 +550,8 @@
       border-color: rgba(15,23,42,0.98) transparent transparent transparent;
     }
 
-    .toast.visible {
-      opacity: 1;
-    }
+    .toast.visible { opacity: 1; }
 
-
-    /* 오버레이 튜토리얼 */
     .overlay {
       position: fixed;
       inset: 0;
@@ -636,7 +623,7 @@
     .overlay-footer {
       margin-top: 8px;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 8px;
       align-items: center;
       position: relative;
@@ -667,14 +654,6 @@
       transform: translateY(-1px);
     }
 
-    .overlay-btn-sub {
-      border: none;
-      background: transparent;
-      color: var(--text-sub);
-      font-size: 11px;
-      cursor: pointer;
-    }
-
     .celebrate {
       font-size: 14px;
       line-height: 1.7;
@@ -683,7 +662,6 @@
 
     .celebrate strong { color: var(--accent-strong); }
 
-    /* 반응형 조정 */
     @media (max-width: 768px) {
       .page { padding-inline: 12px; }
       header .tagline { font-size: 11px; max-width: 100%; }
@@ -704,10 +682,10 @@
       .overlay-card { padding-inline: 14px; }
 
       .toast {
-        font-size: 11px;      /* 모바일에서 글자 살짝 줄임 */
-        padding: 5px 10px;    /* 세로 한 번 더 압축 */
+        font-size: 11px;
+        padding: 5px 10px;
         max-width: 88%;
-        top: 35%;             /* 화면 좀 더 위쪽으로 */
+        top: 35%;
       }
     }
   </style>
@@ -829,7 +807,6 @@
         <!-- Mixer (EQ + Volumes) -->
         <div class="mixer">
           <div class="mixer-row">
-            <!-- EQ -->
             <div class="eq">
               <div class="xfader-label">
                 <span id="eqTitle"></span>
@@ -852,7 +829,6 @@
               </div>
             </div>
 
-            <!-- Volumes Summary -->
             <div class="volumes">
               <span id="volSummaryTitle"></span>
               <span id="volSummaryA"></span>
@@ -861,7 +837,6 @@
           </div>
         </div>
 
-        <!-- 말풍선 토스트 -->
         <div class="toast" id="toast"></div>
       </section>
     </main>
@@ -875,7 +850,6 @@
       <div class="overlay-body" id="overlayBody"></div>
       <div class="overlay-footer">
         <span class="overlay-step" id="overlayStepText"></span>
-        <button class="overlay-btn-sub" id="overlaySkip"></button>
         <button class="overlay-btn-main" id="overlayNext"></button>
       </div>
     </div>
@@ -886,1002 +860,961 @@
   <audio id="audioB" src="trackB.mp3" loop preload="none"></audio>
 
   <script>
-    // --------- 문자열 (KO / EN) ---------
-    const STRINGS = {
-      ko: {
-        logoTitle: "디제잉 3분 체험",
-        logoSub: "처음 만져보는 사람을 위한 초간단 튜토리얼",
-        headerTagline: "“한 곡처럼 들리게 만들기”가 오늘의 목표입니다.",
-        langLabel: "언어",
-        heroTitle: "디제이가 뭘 하는지, 직접 손으로 느껴보기",
-        heroSub: "장비는 없어도 괜찮아요. 브라우저 안에서 두 곡을 섞어 보면서\n박자, 톤, 볼륨을 눈과 귀로 한 번에 이해할 수 있어요.",
-        heroButtonText: "튜토리얼 다시 시작하기",
-        heroHint: "헤드폰을 끼고 하면 더 재밌습니다 🎧",
-        djHeaderLeft: "🎚️ <strong>Step-by-step</strong> 믹스 연습 공간",
-        djHeaderRight: "왼쪽 곡에서 오른쪽 곡으로 부드럽게 넘어가 봅시다.",
+    (function () {
+      // --------- 문자열 (KO / EN) ---------
+      const STRINGS = {
+        ko: {
+          logoTitle: "디제잉 3분 체험",
+          logoSub: "처음 만져보는 사람을 위한 초간단 튜토리얼",
+          headerTagline: "“한 곡처럼 들리게 만들기”가 오늘의 목표입니다.",
+          langLabel: "언어",
+          heroTitle: "디제이가 뭘 하는지, 직접 손으로 느껴보기",
+          heroSub: "장비는 없어도 괜찮아요. 브라우저 안에서 두 곡을 섞어 보면서\n박자, 톤, 볼륨을 눈과 귀로 한 번에 이해할 수 있어요.",
+          heroButtonText: "튜토리얼 다시 시작하기",
+          heroHint: "헤드폰을 끼고 하면 더 재밌습니다 🎧",
+          djHeaderLeft: "🎚️ <strong>Step-by-step</strong> 믹스 연습 공간",
+          djHeaderRight: "왼쪽 곡에서 오른쪽 곡으로 부드럽게 넘어가 봅시다.",
 
-        deckALabel: "Deck A",
-        deckAPill: "현재 재생 중인 곡",
-        deckBLabel: "Deck B",
-        deckBPill: "곧 들어올 다음 곡",
-        trackATitle: "Liquid Earth - Wizard of Loneliness",
-        trackBTitle: "Huerta - Mandala",
-        metaA: "8A · 131 BPM",
-        metaB: "8B · 131 BPM",
-        playLabel: "재생 / 정지",
-        volLabel: "볼륨",
-        bpmLabel: "BPM",
-        waveALabel: "타임라인 (Deck A)",
-        waveBLabel: "타임라인 (Deck B)",
+          deckALabel: "Deck A",
+          deckAPill: "현재 재생 중인 곡",
+          deckBLabel: "Deck B",
+          deckBPill: "곧 들어올 다음 곡",
+          trackATitle: "Liquid Earth - Wizard of Loneliness",
+          trackBTitle: "Huerta - Mandala",
+          metaA: "8A · 131 BPM",
+          metaB: "8B · 131 BPM",
+          playLabel: "재생 / 정지",
+          volLabel: "볼륨",
+          bpmLabel: "BPM",
+          waveALabel: "타임라인 (Deck A)",
+          waveBLabel: "타임라인 (Deck B)",
 
-        eqTitle: "EQ (Deck B)",
-        eqSubTitle: "고 · 중 · 저음 순서로 끝까지 올려보며 변화를 느껴보세요.",
-        eqHighLabel: "HIGH",
-        eqMidLabel: "MID",
-        eqLowLabel: "BASS",
+          eqTitle: "EQ (Deck B)",
+          eqSubTitle: "고 · 중 · 저음 순서로 끝까지 올려보며 변화를 느껴보세요.",
+          eqHighLabel: "HIGH",
+          eqMidLabel: "MID",
+          eqLowLabel: "BASS",
 
-        volSummaryTitle: "현재 상태",
-        volSummaryA: "Deck A 볼륨: <strong id=\"statusVolA\">100%</strong>",
-        volSummaryB: "Deck B 볼륨: <strong id=\"statusVolB\">0%</strong>",
+          volSummaryTitle: "현재 상태",
+          volSummaryA: 'Deck A 볼륨: <strong id="statusVolA">100%</strong>',
+          volSummaryB: 'Deck B 볼륨: <strong id="statusVolB">0%</strong>',
 
-        overlaySkip: "튜토리얼 건너뛰기",
-        overlayNext: "계속하기",
+          overlayNext: "계속하기",
 
-        tutorial: {
-          1: {
-            eyebrow: "튜토리얼 · Step 1",
-            title: "어서 오세요!",
-            body: `디제잉이 뭔지 궁금해 하셨죠?<br/>
+          tutorial: {
+            1: {
+              eyebrow: "튜토리얼 · Step 1",
+              title: "어서 오세요!",
+              body: `디제잉이 뭔지 궁금해 하셨죠?<br/>
 지금부터 브라우저 안에서 직접 <strong>두 곡을 한 곡처럼</strong> 섞어 보면서 알려드릴게요.`,
-            stepsText: "1 / 9",
-          },
-          2: {
-            eyebrow: "튜토리얼 · Step 2",
-            title: "디제잉은 무엇을 할까요?",
-            body: `디제잉은 서로 다른 두 곡을 <strong>하나의 흐름처럼</strong> 이어붙이는 과정이에요.<br/><br/>
+              stepsText: "1 / 9",
+            },
+            2: {
+              eyebrow: "튜토리얼 · Step 2",
+              title: "디제잉은 무엇을 할까요?",
+              body: `디제잉은 서로 다른 두 곡을 <strong>하나의 흐름처럼</strong> 이어붙이는 과정이에요.<br/><br/>
 세 가지를 맞추면 됩니다:
 <ul>
   <li>🎚️ <strong>박자(BPM)</strong> – 같은 속도로 재생되게</li>
   <li>🎵 <strong>조성(Key)</strong> – 어울리는 음끼리 고르고</li>
   <li>⚖️ <strong>볼륨 밸런스</strong> – 한 곡이 강할 땐 다른 곡은 살짝 빠지도록</li>
 </ul>`,
-            stepsText: "2 / 9",
-          },
-          3: {
-            eyebrow: "튜토리얼 · Step 3",
-            title: "오늘 만질 장비를 소개합니다.",
-            body: `화면 아래 장비가 보이시죠?<br/>
+              stepsText: "2 / 9",
+            },
+            3: {
+              eyebrow: "튜토리얼 · Step 3",
+              title: "오늘 만질 장비를 소개합니다.",
+              body: `화면 아래 장비가 보이시죠?<br/>
 왼쪽이 <strong>현재 곡(Deck A)</strong>, 오른쪽이 <strong>다음 곡(Deck B)</strong>이에요.<br/>
 (모바일의 경우 위쪽이 현재 곡, 아래쪽이 다음 곡)<br/><br/>
 지금은 Deck A가 재생되고 있습니다.`,
-            stepsText: "3 / 9",
-          },
-          4: {
-            eyebrow: "튜토리얼 · Step 4",
-            title: "속도는 이미 맞춰 놨어요",
-            body: `Deck B에 <strong>BPM 슬라이더</strong>가 보이시죠?<br/>
+              stepsText: "3 / 9",
+            },
+            4: {
+              eyebrow: "튜토리얼 · Step 4",
+              title: "속도는 이미 맞춰 놨어요",
+              body: `Deck B에 <strong>BPM 슬라이더</strong>가 보이시죠?<br/>
           실제 디제잉에서는 이걸로 곡의 속도를 맞춥니다.<br/><br/>
           이번 데모에서는 두 곡을 미리 <strong>같은 속도(131 BPM)</strong>로 렌더링해 뒀어요.<br/>
           그래도 느낌을 익혀보기 위해, 슬라이더를 움직여 <strong>131</strong>에 딱 맞춰보세요.`,
-            stepsText: "4 / 9",
-          },
-          5: {
-            eyebrow: "튜토리얼 · Step 5",
-            title: "좋은 타이밍에 두 번째 곡 넣기",
-            body: `이제 Deck A는 곡의 한 지점을 향해 가고 있고,<br/>
+              stepsText: "4 / 9",
+            },
+            5: {
+              eyebrow: "튜토리얼 · Step 5",
+              title: "좋은 타이밍에 두 번째 곡 넣기",
+              body: `이제 Deck A는 곡의 한 지점을 향해 가고 있고,<br/>
 Deck B는 들어올 준비를 하고 있어요.<br/><br/>
 음악을 즐기시다가 Deck A 타임라인의 <strong>빨간 표시</strong>가 다가오면,<br/>
 그때 Deck B의 ▶ 버튼을 눌러주세요.<br/>
 (이 스텝에서는 깔끔하게 들어가도록 자동으로 맞춰 드리니, 너무 긴장하지 마세요!)`,
-            stepsText: "5 / 9",
-          },
-          6: {
-            eyebrow: "튜토리얼 · Step 6",
-            title: "두 번째 곡의 존재감 키우기",
-            body: `두 곡이 함께 재생되기 시작했다면,<br/>
+              stepsText: "5 / 9",
+            },
+            6: {
+              eyebrow: "튜토리얼 · Step 6",
+              title: "두 번째 곡의 존재감 키우기",
+              body: `두 곡이 함께 재생되기 시작했다면,<br/>
 이제 Deck B의 <strong>볼륨을 끝까지 올려서</strong><br/>
 두 번째 곡이 분명히 들리게 만들어 볼 거예요.`,
-            stepsText: "6 / 9",
-          },
-          7: {
-            eyebrow: "튜토리얼 · Step 7",
-            title: "고 · 중 · 저음대로 자리 바꾸기",
-            body: `이제 Deck B의 EQ를 만지면서 <strong>누가 더 앞에 설지</strong> 정해볼 차례에요.<br/><br/>
+              stepsText: "6 / 9",
+            },
+            7: {
+              eyebrow: "튜토리얼 · Step 7",
+              title: "고 · 중 · 저음대로 자리 바꾸기",
+              body: `이제 Deck B의 EQ를 만지면서 <strong>누가 더 앞에 설지</strong> 정해볼 차례에요.<br/><br/>
 <strong>HIGH → MID → BASS</strong> 순서로,<br/>
 각 슬라이더를 <strong>위쪽 끝까지</strong> 올려보세요.`,
-            stepsText: "7 / 9",
-          },
-          8: {
-            eyebrow: "튜토리얼 · Step 8",
-            title: "첫 번째 곡을 부드럽게 퇴장시키기",
-            body: `Deck B의 존재감이 충분히 올라왔다면,<br/>
+              stepsText: "7 / 9",
+            },
+            8: {
+              eyebrow: "튜토리얼 · Step 8",
+              title: "첫 번째 곡을 부드럽게 퇴장시키기",
+              body: `Deck B의 존재감이 충분히 올라왔다면,<br/>
 이제 첫 번째 곡(Deck A)을 <strong>천천히 뒤로 보내줄</strong> 차례예요.<br/><br/>
 Deck A의 볼륨을 슬슬 내려서 <strong>맨 아래</strong>까지 만들고,<br/>
 그다음, 마지막으로 Deck A의 ⏸ 버튼을 눌러 꺼주면 믹스 완성입니다.`,
-            stepsText: "8 / 9",
-          },
-          9: {
-            eyebrow: "끝!",
-            title: "짝짝짝!! 디제이가 되신 걸 축하합니다 🎉",
-            body: `<div class="celebrate">
+              stepsText: "8 / 9",
+            },
+            9: {
+              eyebrow: "끝!",
+              title: "짝짝짝!! 디제이가 되신 걸 축하합니다 🎉",
+              body: `<div class="celebrate">
 방금 하신 일은 실제 클럽에서 디제이가 하는 일과 <strong>거의 동일한 흐름</strong>이에요.<br/><br/>
 언젠가 진짜 장비를 만났을 때, 훨씬 덜 낯설게 느껴질 거예요 :)
 </div>`,
-            stepsText: "완료",
+              stepsText: "완료",
+            },
+          },
+          toasts: {
+            bpmAsk: "Deck B의 BPM을 131로 맞춰보세요.",
+            bpmPerfect: "완벽합니다. 131 BPM으로 맞춰졌어요.",
+            syncHint: "Deck A의 빨간 지점을 보다가, 좋다 싶을 때 Deck B ▶를 눌러보세요.",
+            syncDone: "딱 좋았어요! 두 곡이 같이 달리고 있습니다.",
+            volBAsk: "Deck B 볼륨을 끝까지 올려보세요.",
+            volBDone: "이제 두 번째 곡이 충분히 앞에 서 있습니다.",
+            eqHigh: "하이햇/공기감이 더 살아났어요. 이제 MID를 올려볼까요?",
+            eqMid: "보컬/악기 소리가 또렷해졌죠? 이제 BASS를 올려봅시다.",
+            eqLow: "킥이 붙으니까 진짜 바뀐 느낌 나죠.",
+            volAFade: "Deck A 볼륨을 맨 아래까지 내려보세요.",
+            volAStop: "좋아요! 이제 Deck A의 ⏸ 버튼을 눌러 완전히 꺼볼까요?",
+            restartTop: "튜토리얼을 처음부터 다시 시작합니다.",
           },
         },
-        toasts: {
-          bpmAsk: "Deck B의 BPM을 131로 맞춰보세요.",
-          bpmPerfect: "완벽합니다. 131 BPM으로 맞춰졌어요.",
-          syncHint: "Deck A의 빨간 지점을 보다가, 좋다 싶을 때 Deck B ▶를 눌러보세요.",
-          syncDone: "딱 좋았어요! 두 곡이 같이 달리고 있습니다.",
-          volBAsk: "Deck B 볼륨을 끝까지 올려보세요.",
-          volBDone: "이제 두 번째 곡이 충분히 앞에 서 있습니다.",
-          eqHigh: "하이햇/공기감이 더 살아났어요. 이제 MID를 올려볼까요?",
-          eqMid: "보컬/악기 소리가 또렷해졌죠? 이제 BASS를 올려봅시다.",
-          eqLow: "킥이 붙으니까 진짜 바뀐 느낌 나죠.",
-          volAFade: "Deck A 볼륨을 맨 아래까지 내려보세요.",
-          volAStop: "좋아요! 이제 Deck A의 ⏸ 버튼을 눌러 완전히 꺼볼까요?",
-          skipOverlay: "튜토리얼은 언제든 다시 시작할 수 있어요.",
-          skipTop: "튜토리얼을 처음부터 다시 시작합니다.",
-        },
-      },
 
-      en: {
-        logoTitle: "3-Minute DJ Demo",
-        logoSub: "A tiny tutorial for total beginners",
-        headerTagline: "Today's goal: make it sound like one continuous track.",
-        langLabel: "Language",
-        heroTitle: "Feel what a DJ actually does, with your own hands",
-        heroSub: "No hardware? No problem. Mix two tracks in your browser\nand understand tempo, tone, and volume with eyes and ears together.",
-        heroButtonText: "Restart tutorial",
-        heroHint: "Headphones recommended for maximum nerd joy 🎧",
-        djHeaderLeft: "🎚️ <strong>Step-by-step</strong> mix playground",
-        djHeaderRight: "Let’s move smoothly from the left track to the right.",
+        en: {
+          logoTitle: "3-Minute DJ Demo",
+          logoSub: "A tiny tutorial for total beginners",
+          headerTagline: "Today's goal: make it sound like one continuous track.",
+          langLabel: "Language",
+          heroTitle: "Feel what a DJ actually does, with your own hands",
+          heroSub: "No hardware? No problem. Mix two tracks in your browser\nand understand tempo, tone, and volume with eyes and ears together.",
+          heroButtonText: "Restart tutorial",
+          heroHint: "Headphones recommended for maximum nerd joy 🎧",
+          djHeaderLeft: "🎚️ <strong>Step-by-step</strong> mix playground",
+          djHeaderRight: "Let’s move smoothly from the left track to the right.",
 
-        deckALabel: "Deck A",
-        deckAPill: "Currently playing",
-        deckBLabel: "Deck B",
-        deckBPill: "Next track coming in",
-        trackATitle: "Robin Graham – Pipe Dream",
-        trackBTitle: "Salomo – Motion",
-        metaA: "8A · 131 BPM",
-        metaB: "8B · 127 BPM → 131 BPM",
-        playLabel: "Play / Pause",
-        volLabel: "Volume",
-        bpmLabel: "BPM",
-        waveALabel: "Timeline (Deck A)",
-        waveBLabel: "Timeline (Deck B)",
+          deckALabel: "Deck A",
+          deckAPill: "Currently playing",
+          deckBLabel: "Deck B",
+          deckBPill: "Next track coming in",
+          trackATitle: "Robin Graham – Pipe Dream",
+          trackBTitle: "Salomo – Motion",
+          metaA: "8A · 131 BPM",
+          metaB: "8B · 127 BPM → 131 BPM",
+          playLabel: "Play / Pause",
+          volLabel: "Volume",
+          bpmLabel: "BPM",
+          waveALabel: "Timeline (Deck A)",
+          waveBLabel: "Timeline (Deck B)",
 
-        eqTitle: "EQ (Deck B)",
-        eqSubTitle: "Raise highs, mids, and lows in order and hear the change.",
-        eqHighLabel: "HIGH",
-        eqMidLabel: "MID",
-        eqLowLabel: "BASS",
+          eqTitle: "EQ (Deck B)",
+          eqSubTitle: "Raise highs, mids, and lows in order and hear the change.",
+          eqHighLabel: "HIGH",
+          eqMidLabel: "MID",
+          eqLowLabel: "BASS",
 
-        volSummaryTitle: "Current status",
-        volSummaryA: "Deck A volume: <strong id=\"statusVolA\">100%</strong>",
-        volSummaryB: "Deck B volume: <strong id=\"statusVolB\">0%</strong>",
+          volSummaryTitle: "Current status",
+          volSummaryA: 'Deck A volume: <strong id="statusVolA">100%</strong>',
+          volSummaryB: 'Deck B volume: <strong id="statusVolB">0%</strong>',
 
-        overlaySkip: "Skip tutorial",
-        overlayNext: "Next",
+          overlayNext: "Next",
 
-        tutorial: {
-          1: {
-            eyebrow: "Tutorial · Step 1",
-            title: "Welcome!",
-            body: `Ever wondered what DJs actually do?<br/>
+          tutorial: {
+            1: {
+              eyebrow: "Tutorial · Step 1",
+              title: "Welcome!",
+              body: `Ever wondered what DJs actually do?<br/>
 In this demo you’ll <strong>mix two tracks into one</strong> right in your browser.`,
-            stepsText: "1 / 9",
-          },
-          2: {
-            eyebrow: "Tutorial · Step 2",
-            title: "What is DJing?",
-            body: `DJing is about making different songs feel like <strong>one smooth journey</strong>.<br/><br/>
+              stepsText: "1 / 9",
+            },
+            2: {
+              eyebrow: "Tutorial · Step 2",
+              title: "What is DJing?",
+              body: `DJing is about making different songs feel like <strong>one smooth journey</strong>.<br/><br/>
 You mainly care about three things:
 <ul>
   <li>🎚️ <strong>Tempo (BPM)</strong> – match the speed</li>
   <li>🎵 <strong>Key</strong> – choose tracks that harmonize</li>
   <li>⚖️ <strong>Volume balance</strong> – one track steps back as the other steps forward</li>
 </ul>`,
-            stepsText: "2 / 9",
-          },
-          3: {
-            eyebrow: "Tutorial · Step 3",
-            title: "Meet today’s controller",
-            body: `See the UI below?<br/>
+              stepsText: "2 / 9",
+            },
+            3: {
+              eyebrow: "Tutorial · Step 3",
+              title: "Meet today’s controller",
+              body: `See the UI below?<br/>
 The left side is the <strong>current track (Deck A)</strong>, the right is the <strong>next track (Deck B)</strong>.<br/><br/>
 For this demo, Deck A is playing around the <strong>middle of the track</strong>.`,
-            stepsText: "3 / 9",
-          },
-          4: {
-            eyebrow: "Tutorial · Step 4",
-            title: "Tempo is already matched for you",
-            body: `See the <strong>BPM slider</strong> on Deck B?<br/>
+              stepsText: "3 / 9",
+            },
+            4: {
+              eyebrow: "Tutorial · Step 4",
+              title: "Tempo is already matched for you",
+              body: `See the <strong>BPM slider</strong> on Deck B?<br/>
           On real gear, this is where you would match the tempo.<br/><br/>
           In this demo, both tracks are already rendered at<br/>
           <strong>the same tempo (131 BPM)</strong>.<br/>
           Still, try moving the slider and landing exactly on <strong>131</strong> to get a feel for it.`,
-            stepsText: "4 / 9",
-          },
-          5: {
-            eyebrow: "Tutorial · Step 5",
-            title: "Bring in the second track at a good moment",
-            body: `Deck A is approaching a mix point,<br/>
+              stepsText: "4 / 9",
+            },
+            5: {
+              eyebrow: "Tutorial · Step 5",
+              title: "Bring in the second track at a good moment",
+              body: `Deck A is approaching a mix point,<br/>
 and Deck B is ready to come in.<br/><br/>
 When Deck A’s <strong>red marker</strong> reaches the play point,<br/>
 hit Deck B’s ▶ button.<br/>
 In this step, we’ll snap it into a <strong>clean mix point</strong> for you.`,
-            stepsText: "5 / 9",
-          },
-          6: {
-            eyebrow: "Tutorial · Step 6",
-            title: "Turn up the presence of the second track",
-            body: `Once both tracks are playing,<br/>
+              stepsText: "5 / 9",
+            },
+            6: {
+              eyebrow: "Tutorial · Step 6",
+              title: "Turn up the presence of the second track",
+              body: `Once both tracks are playing,<br/>
 slowly raise <strong>Deck B’s volume all the way up</strong><br/>
 so you can clearly hear the new track coming in.`,
-            stepsText: "6 / 9",
-          },
-          7: {
-            eyebrow: "Tutorial · Step 7",
-            title: "Swap places using highs, mids, and bass",
-            body: `Now use EQ on Deck B to decide <strong>who stands in front</strong>.<br/><br/>
+              stepsText: "6 / 9",
+            },
+            7: {
+              eyebrow: "Tutorial · Step 7",
+              title: "Swap places using highs, mids, and bass",
+              body: `Now use EQ on Deck B to decide <strong>who stands in front</strong>.<br/><br/>
 Raise them in order: <strong>HIGH → MID → BASS</strong>.<br/>
 Each slider should go to the <strong>top of its range</strong>.`,
-            stepsText: "7 / 9",
-          },
-          8: {
-            eyebrow: "Tutorial · Step 8",
-            title: "Let the first track exit gracefully",
-            body: `Once Deck B is strong enough,<br/>
+              stepsText: "7 / 9",
+            },
+            8: {
+              eyebrow: "Tutorial · Step 8",
+              title: "Let the first track exit gracefully",
+              body: `Once Deck B is strong enough,<br/>
 it’s time to gently <strong>fade out Deck A</strong>.<br/><br/>
 Lower Deck A’s volume all the way down,<br/>
 then press Deck A’s ⏸ button one last time to stop it completely.`,
-            stepsText: "8 / 9",
-          },
-          9: {
-            eyebrow: "Done!",
-            title: "Nice! You just did a real DJ move 🎉",
-            body: `<div class="celebrate">
+              stepsText: "8 / 9",
+            },
+            9: {
+              eyebrow: "Done!",
+              title: "Nice! You just did a real DJ move 🎉",
+              body: `<div class="celebrate">
 What you just did is <strong>very close to what club DJs do</strong> on real gear.<br/><br/>
 From here, you can play around freely with<br/>
 EQ and volume and find <strong>your own timing</strong>.<br/><br/>
 Next time you see a DJ, you’ll know exactly what to listen for. :)
 </div>`,
-            stepsText: "Done",
+              stepsText: "Done",
+            },
           },
-        },
-        toasts: {
-          bpmAsk: "Set Deck B’s BPM to 131.",
-          bpmPerfect: "Perfect. Locked at 131 BPM.",
-          syncHint: "Watch Deck A’s red marker and hit ▶ on Deck B when it feels right.",
-          syncDone: "Nice timing! Both tracks are now running together.",
-          volBAsk: "Raise Deck B’s volume all the way up.",
-          volBDone: "Now the second track should be clearly up front.",
-          eqHigh: "You should hear more air and sparkle. Now raise MID.",
-          eqMid: "Vocals/instruments should pop out. Time for BASS.",
-          eqLow: "When the kick comes in, the feel really changes.",
-          volAFade: "Fade Deck A’s volume all the way down.",
-          volAStop: "Great. Now hit Deck A’s ▶ button to fully stop it.",
-          skipOverlay: "You can restart the tutorial anytime.",
-          skipTop: "Restarting the tutorial from the beginning.",
-        },
-      }
-    };
-
-    // --------- 상수: 시나리오용 타임 (초) ----------
-    const A_START = 200;       // Pipe Dream 시작 지점
-    const B_START = 117.252;       // Motion 시작 지점
-    const A_FLAG  = 249.16; // 믹스 포인트 
-
-    // --------- Audio & Web Audio ----------
-    const audioA = document.getElementById("audioA");
-    const audioB = document.getElementById("audioB");
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const sourceA = audioCtx.createMediaElementSource(audioA);
-    const sourceB = audioCtx.createMediaElementSource(audioB);
-
-    // 게인
-    const gainA = audioCtx.createGain();
-    const gainB = audioCtx.createGain();
-    gainA.gain.value = 1;
-    gainB.gain.value = 0;
-
-    // A트랙 EQ
-    const lowA = audioCtx.createBiquadFilter();
-    lowA.type = "lowshelf";
-    lowA.frequency.value = 200;
-    lowA.gain.value = 0;
-
-    const midA = audioCtx.createBiquadFilter();
-    midA.type = "peaking";
-    midA.frequency.value = 1000;
-    midA.Q.value = 1;
-    midA.gain.value = 0;
-
-    const highA = audioCtx.createBiquadFilter();
-    highA.type = "highshelf";
-    highA.frequency.value = 4000;
-    highA.gain.value = 0;
-
-    // B트랙 EQ
-    const lowB = audioCtx.createBiquadFilter();
-    lowB.type = "lowshelf";
-    lowB.frequency.value = 200;
-
-    const midB = audioCtx.createBiquadFilter();
-    midB.type = "peaking";
-    midB.frequency.value = 1000;
-    midB.Q.value = 1;
-
-    const highB = audioCtx.createBiquadFilter();
-    highB.type = "highshelf";
-    highB.frequency.value = 4000;
-
-    // 라우팅
-    sourceA.connect(lowA);
-    lowA.connect(midA);
-    midA.connect(highA);
-    highA.connect(gainA);
-    gainA.connect(audioCtx.destination);
-
-    sourceB.connect(lowB);
-    lowB.connect(midB);
-    midB.connect(highB);
-    highB.connect(gainB);
-    gainB.connect(audioCtx.destination);
-
-    // --------- UI 요소 ----------
-    const deckA = document.getElementById("deckA");
-    const deckB = document.getElementById("deckB");
-
-    const playA = document.getElementById("playA");
-    const playB = document.getElementById("playB");
-
-    const volA = document.getElementById("volA");
-    const volB = document.getElementById("volB");
-    const volAVal = document.getElementById("volAVal");
-    const volBVal = document.getElementById("volBVal");
-
-    const bpmB = document.getElementById("bpmB");
-    const bpmBVal = document.getElementById("bpmBVal");
-
-    const eqHigh = document.getElementById("eqHigh");
-    const eqMid = document.getElementById("eqMid");
-    const eqLow = document.getElementById("eqLow");
-    const eqHighVal = document.getElementById("eqHighVal");
-    const eqMidVal = document.getElementById("eqMidVal");
-    const eqLowVal = document.getElementById("eqLowVal");
-    const eqRowHigh = document.getElementById("eqRowHigh");
-    const eqRowMid = document.getElementById("eqRowMid");
-    const eqRowLow = document.getElementById("eqRowLow");
-
-    const toast = document.getElementById("toast");
-
-    // Waveforms
-    const waveA = document.getElementById("waveA");
-    const waveAProg = document.getElementById("waveAProg");
-    const waveAFlag = document.getElementById("waveAFlag");
-    const waveB = document.getElementById("waveB");
-    const waveBProg = document.getElementById("waveBProg");
-
-    let durationA = 240;
-    let durationB = 240;
-
-    audioA.addEventListener("loadedmetadata", () => {
-      if (!isNaN(audioA.duration) && audioA.duration > 0) {
-        durationA = audioA.duration;
-      }
-    });
-    audioB.addEventListener("loadedmetadata", () => {
-      if (!isNaN(audioB.duration) && audioB.duration > 0) {
-        durationB = audioB.duration;
-      }
-    });
-
-    function updateWaveforms() {
-      if (durationA > 0) {
-        const p = (audioA.currentTime / durationA) * 100;
-        waveAProg.style.width = Math.min(Math.max(p, 0), 100) + "%";
-
-        const flagPos = (A_FLAG / durationA) * 100;
-        waveAFlag.style.left = Math.min(Math.max(flagPos, 0), 100) + "%";
-      }
-      if (durationB > 0) {
-        const pB = (audioB.currentTime / durationB) * 100;
-        waveBProg.style.width = Math.min(Math.max(pB, 0), 100) + "%";
-      }
-      requestAnimationFrame(updateWaveforms);
-    }
-    requestAnimationFrame(updateWaveforms);
-
-    // 튜토리얼 오버레이
-    const overlay = document.getElementById("overlay");
-    const overlayEyebrow = document.getElementById("overlayEyebrow");
-    const overlayTitle = document.getElementById("overlayTitle");
-    const overlayBody = document.getElementById("overlayBody");
-    const overlayStepText = document.getElementById("overlayStepText");
-    const overlayNext = document.getElementById("overlayNext");
-    const overlaySkip = document.getElementById("overlaySkip");
-
-    const startTutorialTop = document.getElementById("startTutorialTop");
-
-    // Lang elements
-    const logoTitle = document.getElementById("logoTitle");
-    const logoSub = document.getElementById("logoSub");
-    const headerTagline = document.getElementById("headerTagline");
-    const langLabel = document.getElementById("langLabel");
-    const langKoBtn = document.getElementById("langKo");
-    const langEnBtn = document.getElementById("langEn");
-
-    const heroTitle = document.getElementById("heroTitle");
-    const heroSub = document.getElementById("heroSub");
-    const heroButtonText = document.getElementById("heroButtonText");
-    const heroHint = document.getElementById("heroHint");
-
-    const djHeaderLeft = document.getElementById("djHeaderLeft");
-    const djHeaderRight = document.getElementById("djHeaderRight");
-
-    const deckALabel = document.getElementById("deckALabel");
-    const deckAPill = document.getElementById("deckAPill");
-    const deckBLabel = document.getElementById("deckBLabel");
-    const deckBPill = document.getElementById("deckBPill");
-    const trackATitle = document.getElementById("trackATitle");
-    const trackBTitle = document.getElementById("trackBTitle");
-    const metaA = document.getElementById("metaA");
-    const metaB = document.getElementById("metaB");
-    const playALabel = document.getElementById("playALabel");
-    const playBLabel = document.getElementById("playBLabel");
-    const volALabel = document.getElementById("volALabel");
-    const volBLabel = document.getElementById("volBLabel");
-    const bpmLabel = document.getElementById("bpmLabel");
-    const waveALabel = document.getElementById("waveALabel");
-    const waveBLabel = document.getElementById("waveBLabel");
-
-    const eqTitle = document.getElementById("eqTitle");
-    const eqSubTitle = document.getElementById("eqSubTitle");
-    const eqHighLabel = document.getElementById("eqHighLabel");
-    const eqMidLabel = document.getElementById("eqMidLabel");
-    const eqLowLabel = document.getElementById("eqLowLabel");
-    const volSummaryTitle = document.getElementById("volSummaryTitle");
-    const volSummaryA = document.getElementById("volSummaryA");
-    const volSummaryB = document.getElementById("volSummaryB");
-
-    // --------- 상태 ---------
-    let tutorialStep = 1;
-    let isPlayingA = false;
-    let isPlayingB = false;
-    let currentLang = "ko";
-
-    let awaitingBpm = false;
-    let awaitingSyncPlay = false;
-    let awaitingBVolumeRaise = false;
-    let eqPhase = null; // 'high' -> 'mid' -> 'low' -> 'done'
-    let awaitingVolumeFade = false;
-    let awaitingStopA = false;
-
-    // 0.5초 유지용 타이머들
-    let bpmStableTimer = null;
-    let volBStableTimer = null;
-    let eqHighStableTimer = null;
-    let eqMidStableTimer = null;
-    let eqLowStableTimer = null;
-    let volAStableTimer = null;
-
-    function ensureAudioContext() {
-      if (audioCtx.state === "suspended") {
-        audioCtx.resume();
-      }
-    }
-
-    function resetAudioState() {
-      audioA.pause();
-      audioB.pause();
-      isPlayingA = false;
-      isPlayingB = false;
-      audioA.currentTime = A_START;
-      audioB.currentTime = B_START;
-      audioB.playbackRate = 127 / 127; // 기본 1
-      playA.classList.remove("playing");
-      playA.textContent = "▶";
-      playB.classList.remove("playing");
-      playB.textContent = "▶";
-    }
-
-    function resetControlState() {
-      volA.value = 100;
-      volB.value = 0;
-      bpmB.value = 127;
-      eqHigh.value = -20;
-      eqMid.value = -20;
-      eqLow.value = -20;
-
-      awaitingBpm = false;
-      awaitingSyncPlay = false;
-      awaitingBVolumeRaise = false;
-      eqPhase = null;
-      awaitingVolumeFade = false;
-      awaitingStopA = false;
-
-      bpmStableTimer = volBStableTimer = eqHighStableTimer =
-        eqMidStableTimer = eqLowStableTimer = volAStableTimer = null;
-
-      deckA.classList.remove("highlight");
-      deckB.classList.remove("highlight");
-      waveA.classList.remove("wave-highlight");
-      waveB.classList.remove("wave-highlight");
-      eqRowHigh.classList.remove("eq-highlight");
-      eqRowMid.classList.remove("eq-highlight");
-      eqRowLow.classList.remove("eq-highlight");
-      playA.classList.remove("highlight-control");
-      playB.classList.remove("highlight-control");
-      volB.classList.remove("highlight-control");
-
-      updateVolumesFromSliders();
-      updateBpmDisplay();
-      updateEqDisplays();
-      applyEq();
-    }
-
-    function startBaseTrack() {
-      ensureAudioContext();
-      audioA.currentTime = A_START;
-      audioA.play();
-      isPlayingA = true;
-      playA.classList.add("playing");
-      playA.textContent = "⏸";
-    }
-
-    function updateVolumesFromSliders() {
-      const a = Number(volA.value) / 100;
-      const b = Number(volB.value) / 100;
-      gainA.gain.value = a;
-      gainB.gain.value = b;
-      volAVal.textContent = Math.round(a * 100) + "%";
-      volBVal.textContent = Math.round(b * 100) + "%";
-
-      const statusVolAEl = document.getElementById("statusVolA");
-      const statusVolBEl = document.getElementById("statusVolB");
-      if (statusVolAEl) statusVolAEl.textContent = volAVal.textContent;
-      if (statusVolBEl) statusVolBEl.textContent = volBVal.textContent;
-    }
-
-    function updateBpmDisplay() {
-      bpmBVal.textContent = bpmB.value;
-    }
-
-    function updateEqDisplays() {
-      eqHighVal.textContent = eqHigh.value + " dB";
-      eqMidVal.textContent = eqMid.value + " dB";
-      eqLowVal.textContent = eqLow.value + " dB";
-    }
-
-    function applyEq() {
-      const vHigh = Number(eqHigh.value);
-      const vMid  = Number(eqMid.value);
-      const vLow  = Number(eqLow.value);
-
-      // B트랙: 그대로 적용
-      highB.gain.value = vHigh;
-      midB.gain.value  = vMid;
-      lowB.gain.value  = vLow;
-
-      // A트랙: B가 +로 올라갈수록 해당 대역을 반대로 조금 깎음
-      const factor = 0.7;
-      highA.gain.value = vHigh > 0 ? -vHigh * factor : 0;
-      midA.gain.value  = vMid  > 0 ? -vMid  * factor : 0;
-      lowA.gain.value  = vLow  > 0 ? -vLow  * factor : 0;
-    }
-
-    // --------- Toast ---------
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("visible");
-      clearTimeout(showToast._timeout);
-      showToast._timeout = setTimeout(() => {
-        toast.classList.remove("visible");
-      }, 2500);
-    }
-
-    // --------- 언어 적용 ---------
-    function applyLanguageTexts() {
-      const S = STRINGS[currentLang];
-
-      document.documentElement.lang = currentLang === "ko" ? "ko" : "en";
-
-      logoTitle.textContent = S.logoTitle;
-      logoSub.textContent = S.logoSub;
-      headerTagline.textContent = S.headerTagline;
-      langLabel.textContent = S.langLabel;
-
-      heroTitle.textContent = S.heroTitle;
-      heroSub.innerText = S.heroSub;
-      heroButtonText.textContent = S.heroButtonText;
-      heroHint.textContent = S.heroHint;
-
-      djHeaderLeft.innerHTML = S.djHeaderLeft;
-      djHeaderRight.textContent = S.djHeaderRight;
-
-      deckALabel.textContent = S.deckALabel;
-      deckAPill.textContent = S.deckAPill;
-      deckBLabel.textContent = S.deckBLabel;
-      deckBPill.textContent = S.deckBPill;
-      trackATitle.textContent = S.trackATitle;
-      trackBTitle.textContent = S.trackBTitle;
-      metaA.textContent = S.metaA;
-      metaB.textContent = S.metaB;
-      playALabel.textContent = S.playLabel;
-      playBLabel.textContent = S.playLabel;
-      volALabel.textContent = S.volLabel;
-      volBLabel.textContent = S.volLabel;
-      bpmLabel.textContent = S.bpmLabel;
-      waveALabel.textContent = S.waveALabel;
-      waveBLabel.textContent = S.waveBLabel;
-
-      eqTitle.textContent = S.eqTitle;
-      eqSubTitle.textContent = S.eqSubTitle;
-      eqHighLabel.textContent = S.eqHighLabel;
-      eqMidLabel.textContent = S.eqMidLabel;
-      eqLowLabel.textContent = S.eqLowLabel;
-      volSummaryTitle.textContent = S.volSummaryTitle;
-      volSummaryA.innerHTML = S.volSummaryA;
-      volSummaryB.innerHTML = S.volSummaryB;
-
-      overlaySkip.textContent = S.overlaySkip;
-      overlayNext.textContent = S.overlayNext;
-
-      renderTutorialStepText(tutorialStep);
-      // 새로 생긴 상태 텍스트 strong에 현재 값 반영
-      updateVolumesFromSliders();
-    }
-
-    function setLanguage(lang) {
-      currentLang = lang === "en" ? "en" : "ko";
-      langKoBtn.classList.toggle("active", currentLang === "ko");
-      langEnBtn.classList.toggle("active", currentLang === "en");
-      applyLanguageTexts();
-    }
-
-    // --------- 튜토리얼 스텝 정의 렌더 ---------
-    function renderTutorialStepText(step) {
-      const S = STRINGS[currentLang];
-      const info = S.tutorial[step];
-      if (!info) return;
-      overlayEyebrow.textContent = info.eyebrow;
-      overlayTitle.innerHTML = info.title;
-      overlayBody.innerHTML = info.body;
-      overlayStepText.textContent = info.stepsText;
-    }
-
-    function showTutorialStep(step) {
-      tutorialStep = step;
-      renderTutorialStepText(step);
-
-      deckA.classList.remove("highlight");
-      deckB.classList.remove("highlight");
-      waveA.classList.remove("wave-highlight");
-      waveB.classList.remove("wave-highlight");
-      eqRowHigh.classList.remove("eq-highlight");
-      eqRowMid.classList.remove("eq-highlight");
-      eqRowLow.classList.remove("eq-highlight");
-      playA.classList.remove("highlight-control");
-      playB.classList.remove("highlight-control");
-      volB.classList.remove("highlight-control");
-
-      if (step === 3) {
-        deckA.classList.add("highlight");
-      } else if (step === 4) {
-        deckB.classList.add("highlight");
-      } else if (step === 5) {
-        waveA.classList.add("wave-highlight");
-        waveB.classList.add("wave-highlight");
-      } else if (step === 6) {
-        deckB.classList.add("highlight");
-      } else if (step === 7) {
-        eqRowHigh.classList.add("eq-highlight");
-      } else if (step === 8) {
-        deckA.classList.add("highlight");
-      }
-
-      overlay.classList.remove("hidden");
-    }
-
-    function hideTutorial() {
-      overlay.classList.add("hidden");
-    }
-
-    // --------- 0.5초 유지 체크 헬퍼 ---------
-    function makeStableChecker(timerRefName, conditionFn, onStable) {
-      return function() {
-        if (conditionFn()) {
-          if (!window[timerRefName]) {
-            window[timerRefName] = setTimeout(() => {
-              if (conditionFn()) {
-                onStable();
-              }
-              clearTimeout(window[timerRefName]);
-              window[timerRefName] = null;
-            }, 500); // 0.5초
-          }
-        } else {
-          if (window[timerRefName]) {
-            clearTimeout(window[timerRefName]);
-            window[timerRefName] = null;
-          }
+          toasts: {
+            bpmAsk: "Set Deck B’s BPM to 131.",
+            bpmPerfect: "Perfect. Locked at 131 BPM.",
+            syncHint: "Watch Deck A’s red marker and hit ▶ on Deck B when it feels right.",
+            syncDone: "Nice timing! Both tracks are now running together.",
+            volBAsk: "Raise Deck B’s volume all the way up.",
+            volBDone: "Now the second track should be clearly up front.",
+            eqHigh: "You should hear more air and sparkle. Now raise MID.",
+            eqMid: "Vocals/instruments should pop out. Time for BASS.",
+            eqLow: "When the kick comes in, the feel really changes.",
+            volAFade: "Fade Deck A’s volume all the way down.",
+            volAStop: "Great. Now hit Deck A’s ▶ button to fully stop it.",
+            restartTop: "Restarting the tutorial from the beginning.",
+          },
         }
       };
-    }
 
-    // --------- 플레이 버튼 ---------
-    playA.addEventListener("click", () => {
-      ensureAudioContext();
-      if (!isPlayingA) {
+      // --------- 상수: 시나리오용 타임 (초) ----------
+      const A_START = 200;
+      const B_START = 117.252;
+      const A_FLAG  = 249.16;
+
+      // --------- Audio & Web Audio ----------
+      const audioA = document.getElementById("audioA");
+      const audioB = document.getElementById("audioB");
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const sourceA = audioCtx.createMediaElementSource(audioA);
+      const sourceB = audioCtx.createMediaElementSource(audioB);
+
+      const gainA = audioCtx.createGain();
+      const gainB = audioCtx.createGain();
+      gainA.gain.value = 1;
+      gainB.gain.value = 0;
+
+      const lowA = audioCtx.createBiquadFilter();
+      lowA.type = "lowshelf";
+      lowA.frequency.value = 200;
+      lowA.gain.value = 0;
+
+      const midA = document.createElement("span") && audioCtx.createBiquadFilter();
+      midA.type = "peaking";
+      midA.frequency.value = 1000;
+      midA.Q.value = 1;
+      midA.gain.value = 0;
+
+      const highA = audioCtx.createBiquadFilter();
+      highA.type = "highshelf";
+      highA.frequency.value = 4000;
+      highA.gain.value = 0;
+
+      const lowB = audioCtx.createBiquadFilter();
+      lowB.type = "lowshelf";
+      lowB.frequency.value = 200;
+
+      const midB = audioCtx.createBiquadFilter();
+      midB.type = "peaking";
+      midB.frequency.value = 1000;
+      midB.Q.value = 1;
+
+      const highB = audioCtx.createBiquadFilter();
+      highB.type = "highshelf";
+      highB.frequency.value = 4000;
+
+      sourceA.connect(lowA);
+      lowA.connect(midA);
+      midA.connect(highA);
+      highA.connect(gainA);
+      gainA.connect(audioCtx.destination);
+
+      sourceB.connect(lowB);
+      lowB.connect(midB);
+      midB.connect(highB);
+      highB.connect(gainB);
+      gainB.connect(audioCtx.destination);
+
+      // --------- UI 요소 ----------
+      const $ = (id) => document.getElementById(id);
+
+      const deckA = $("deckA");
+      const deckB = $("deckB");
+
+      const playA = $("playA");
+      const playB = $("playB");
+
+      const volA = $("volA");
+      const volB = $("volB");
+      const volAVal = $("volAVal");
+      const volBVal = $("volBVal");
+
+      const bpmB = $("bpmB");
+      const bpmBVal = $("bpmBVal");
+
+      const eqHigh = $("eqHigh");
+      const eqMid = $("eqMid");
+      const eqLow = $("eqLow");
+      const eqHighVal = $("eqHighVal");
+      const eqMidVal = $("eqMidVal");
+      const eqLowVal = $("eqLowVal");
+      const eqRowHigh = $("eqRowHigh");
+      const eqRowMid = $("eqRowMid");
+      const eqRowLow = $("eqRowLow");
+
+      const toast = $("toast");
+
+      const waveA = $("waveA");
+      const waveAProg = $("waveAProg");
+      const waveAFlag = $("waveAFlag");
+      const waveB = $("waveB");
+      const waveBProg = $("waveBProg");
+
+      let durationA = 240;
+      let durationB = 240;
+
+      audioA.addEventListener("loadedmetadata", () => {
+        if (!isNaN(audioA.duration) && audioA.duration > 0) {
+          durationA = audioA.duration;
+        }
+      });
+      audioB.addEventListener("loadedmetadata", () => {
+        if (!isNaN(audioB.duration) && audioB.duration > 0) {
+          durationB = audioB.duration;
+        }
+      });
+
+      function updateWaveforms() {
+        if (durationA > 0) {
+          const p = (audioA.currentTime / durationA) * 100;
+          waveAProg.style.width = Math.min(Math.max(p, 0), 100) + "%";
+          const flagPos = (A_FLAG / durationA) * 100;
+          waveAFlag.style.left = Math.min(Math.max(flagPos, 0), 100) + "%";
+        }
+        if (durationB > 0) {
+          const pB = (audioB.currentTime / durationB) * 100;
+          waveBProg.style.width = Math.min(Math.max(pB, 0), 100) + "%";
+        }
+        requestAnimationFrame(updateWaveforms);
+      }
+      requestAnimationFrame(updateWaveforms);
+
+      // 튜토리얼 오버레이
+      const overlay = $("overlay");
+      const overlayEyebrow = $("overlayEyebrow");
+      const overlayTitle = $("overlayTitle");
+      const overlayBody = $("overlayBody");
+      const overlayStepText = $("overlayStepText");
+      const overlayNext = $("overlayNext");
+
+      const startTutorialTop = $("startTutorialTop");
+
+      // Lang elements
+      const logoTitle = $("logoTitle");
+      const logoSub = $("logoSub");
+      const headerTagline = $("headerTagline");
+      const langLabel = $("langLabel");
+      const langKoBtn = $("langKo");
+      const langEnBtn = $("langEn");
+
+      const heroTitle = $("heroTitle");
+      const heroSub = $("heroSub");
+      const heroButtonText = $("heroButtonText");
+      const heroHint = $("heroHint");
+
+      const djHeaderLeft = $("djHeaderLeft");
+      const djHeaderRight = $("djHeaderRight");
+
+      const deckALabel = $("deckALabel");
+      const deckAPill = $("deckAPill");
+      const deckBLabel = $("deckBLabel");
+      const deckBPill = $("deckBPill");
+      const trackATitle = $("trackATitle");
+      const trackBTitle = $("trackBTitle");
+      const metaA = $("metaA");
+      const metaB = $("metaB");
+      const playALabel = $("playALabel");
+      const playBLabel = $("playBLabel");
+      const volALabel = $("volALabel");
+      const volBLabel = $("volBLabel");
+      const bpmLabel = $("bpmLabel");
+      const waveALabel = $("waveALabel");
+      const waveBLabel = $("waveBLabel");
+
+      const eqTitle = $("eqTitle");
+      const eqSubTitle = $("eqSubTitle");
+      const eqHighLabel = $("eqHighLabel");
+      const eqMidLabel = $("eqMidLabel");
+      const eqLowLabel = $("eqLowLabel");
+      const volSummaryTitle = $("volSummaryTitle");
+      const volSummaryA = $("volSummaryA");
+      const volSummaryB = $("volSummaryB");
+
+      // --------- 상태 ---------
+      let tutorialStep = 1;
+      let isPlayingA = false;
+      let isPlayingB = false;
+      let currentLang = "ko";
+
+      let awaitingBpm = false;
+      let awaitingSyncPlay = false;
+      let awaitingBVolumeRaise = false;
+      let eqPhase = null;
+      let awaitingVolumeFade = false;
+      let awaitingStopA = false;
+
+      let bpmStableTimer = null;
+      let volBStableTimer = null;
+      let eqHighStableTimer = null;
+      let eqMidStableTimer = null;
+      let eqLowStableTimer = null;
+      let volAStableTimer = null;
+
+      function ensureAudioContext() {
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+      }
+
+      function resetPlayButtons() {
+        isPlayingA = false;
+        isPlayingB = false;
+        playA.classList.remove("playing");
+        playB.classList.remove("playing");
+        playA.textContent = "▶";
+        playB.textContent = "▶";
+      }
+
+      function resetAudioState() {
+        audioA.pause();
+        audioB.pause();
+        audioA.currentTime = A_START;
+        audioB.currentTime = B_START;
+        audioB.playbackRate = 1;
+        resetPlayButtons();
+      }
+
+      function clearTimers() {
+        [bpmStableTimer, volBStableTimer, eqHighStableTimer,
+         eqMidStableTimer, eqLowStableTimer, volAStableTimer].forEach((t) => {
+          if (t) clearTimeout(t);
+        });
+        bpmStableTimer = volBStableTimer = eqHighStableTimer =
+          eqMidStableTimer = eqLowStableTimer = volAStableTimer = null;
+      }
+
+      function clearHighlights() {
+        deckA.classList.remove("highlight");
+        deckB.classList.remove("highlight");
+        waveA.classList.remove("wave-highlight");
+        waveB.classList.remove("wave-highlight");
+        eqRowHigh.classList.remove("eq-highlight");
+        eqRowMid.classList.remove("eq-highlight");
+        eqRowLow.classList.remove("eq-highlight");
+        playA.classList.remove("highlight-control");
+        playB.classList.remove("highlight-control");
+        volB.classList.remove("highlight-control");
+      }
+
+      function resetTutorialState() {
+        awaitingBpm = false;
+        awaitingSyncPlay = false;
+        awaitingBVolumeRaise = false;
+        eqPhase = null;
+        awaitingVolumeFade = false;
+        awaitingStopA = false;
+        clearTimers();
+        clearHighlights();
+      }
+
+      function resetControlState() {
+        volA.value = 100;
+        volB.value = 0;
+        bpmB.value = 127;
+        eqHigh.value = -20;
+        eqMid.value = -20;
+        eqLow.value = -20;
+        resetTutorialState();
+        updateVolumesFromSliders();
+        updateBpmDisplay();
+        updateEqDisplays();
+        applyEq();
+      }
+
+      function startBaseTrack() {
+        ensureAudioContext();
+        audioA.currentTime = A_START;
         audioA.play();
         isPlayingA = true;
         playA.classList.add("playing");
         playA.textContent = "⏸";
-      } else {
-        audioA.pause();
-        isPlayingA = false;
-        playA.classList.remove("playing");
-        playA.textContent = "▶";
-
-        if (awaitingStopA) {
-          awaitingStopA = false;
-          showTutorialStep(9);
-        }
       }
-    });
 
-    playB.addEventListener("click", async () => {
-      ensureAudioContext();
-      if (!isPlayingB) {
-        if (awaitingSyncPlay) {
-          // 이 타이밍에만 믹스 포인트로 점프
-          audioA.currentTime = A_FLAG;   // 59.6초
-          audioB.currentTime = B_START;  // 15.2초
+      function updateVolumesFromSliders() {
+        const a = Number(volA.value) / 100;
+        const b = Number(volB.value) / 100;
+        gainA.gain.value = a;
+        gainB.gain.value = b;
+        volAVal.textContent = Math.round(a * 100) + "%";
+        volBVal.textContent = Math.round(b * 100) + "%";
 
-          if (!isPlayingA) {
-            audioA.play();
-            isPlayingA = true;
-            playA.classList.add("playing");
-            playA.textContent = "⏸";
+        const statusVolAEl = document.getElementById("statusVolA");
+        const statusVolBEl = document.getElementById("statusVolB");
+        if (statusVolAEl) statusVolAEl.textContent = volAVal.textContent;
+        if (statusVolBEl) statusVolBEl.textContent = volBVal.textContent;
+      }
+
+      function updateBpmDisplay() {
+        bpmBVal.textContent = bpmB.value;
+      }
+
+      function updateEqDisplays() {
+        eqHighVal.textContent = eqHigh.value + " dB";
+        eqMidVal.textContent = eqMid.value + " dB";
+        eqLowVal.textContent = eqLow.value + " dB";
+      }
+
+      function applyEq() {
+        const vHigh = Number(eqHigh.value);
+        const vMid  = Number(eqMid.value);
+        const vLow  = Number(eqLow.value);
+
+        highB.gain.value = vHigh;
+        midB.gain.value  = vMid;
+        lowB.gain.value  = vLow;
+
+        const factor = 0.7;
+        highA.gain.value = vHigh > 0 ? -vHigh * factor : 0;
+        midA.gain.value  = vMid  > 0 ? -vMid  * factor : 0;
+        lowA.gain.value  = vLow  > 0 ? -vLow  * factor : 0;
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("visible");
+        clearTimeout(showToast._timeout);
+        showToast._timeout = setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2500);
+      }
+
+      function applyLanguageTexts() {
+        const S = STRINGS[currentLang];
+        document.documentElement.lang = currentLang === "ko" ? "ko" : "en";
+
+        logoTitle.textContent = S.logoTitle;
+        logoSub.textContent = S.logoSub;
+        headerTagline.textContent = S.headerTagline;
+        langLabel.textContent = S.langLabel;
+
+        heroTitle.textContent = S.heroTitle;
+        heroSub.innerText = S.heroSub;
+        heroButtonText.textContent = S.heroButtonText;
+        heroHint.textContent = S.heroHint;
+
+        djHeaderLeft.innerHTML = S.djHeaderLeft;
+        djHeaderRight.textContent = S.djHeaderRight;
+
+        deckALabel.textContent = S.deckALabel;
+        deckAPill.textContent = S.deckAPill;
+        deckBLabel.textContent = S.deckBLabel;
+        deckBPill.textContent = S.deckBPill;
+        trackATitle.textContent = S.trackATitle;
+        trackBTitle.textContent = S.trackBTitle;
+        metaA.textContent = S.metaA;
+        metaB.textContent = S.metaB;
+        playALabel.textContent = S.playLabel;
+        playBLabel.textContent = S.playLabel;
+        volALabel.textContent = S.volLabel;
+        volBLabel.textContent = S.volLabel;
+        bpmLabel.textContent = S.bpmLabel;
+        waveALabel.textContent = S.waveALabel;
+        waveBLabel.textContent = S.waveBLabel;
+
+        eqTitle.textContent = S.eqTitle;
+        eqSubTitle.textContent = S.eqSubTitle;
+        eqHighLabel.textContent = S.eqHighLabel;
+        eqMidLabel.textContent = S.eqMidLabel;
+        eqLowLabel.textContent = S.eqLowLabel;
+        volSummaryTitle.textContent = S.volSummaryTitle;
+        volSummaryA.innerHTML = S.volSummaryA;
+        volSummaryB.innerHTML = S.volSummaryB;
+
+        overlayNext.textContent = S.overlayNext;
+
+        renderTutorialStepText(tutorialStep);
+        updateVolumesFromSliders();
+      }
+
+      function setLanguage(lang) {
+        currentLang = lang === "en" ? "en" : "ko";
+        langKoBtn.classList.toggle("active", currentLang === "ko");
+        langEnBtn.classList.toggle("active", currentLang === "en");
+        applyLanguageTexts();
+      }
+
+      function renderTutorialStepText(step) {
+        const S = STRINGS[currentLang];
+        const info = S.tutorial[step];
+        if (!info) return;
+        overlayEyebrow.textContent = info.eyebrow;
+        overlayTitle.innerHTML = info.title;
+        overlayBody.innerHTML = info.body;
+        overlayStepText.textContent = info.stepsText;
+      }
+
+      function showTutorialStep(step) {
+        tutorialStep = step;
+        renderTutorialStepText(step);
+        clearHighlights();
+
+        if (step === 3) {
+          deckA.classList.add("highlight");
+        } else if (step === 4) {
+          deckB.classList.add("highlight");
+        } else if (step === 5) {
+          waveA.classList.add("wave-highlight");
+          waveB.classList.add("wave-highlight");
+        } else if (step === 6) {
+          deckB.classList.add("highlight");
+        } else if (step === 7) {
+          eqRowHigh.classList.add("eq-highlight");
+        } else if (step === 8) {
+          deckA.classList.add("highlight");
+        }
+
+        overlay.classList.remove("hidden");
+      }
+
+      function hideTutorial() {
+        overlay.classList.add("hidden");
+      }
+
+      function makeStableChecker(timerName, conditionFn, onStable) {
+        return function() {
+          if (conditionFn()) {
+            if (!window[timerName]) {
+              window[timerName] = setTimeout(() => {
+                if (conditionFn()) {
+                  onStable();
+                }
+                clearTimeout(window[timerName]);
+                window[timerName] = null;
+              }, 500);
+            }
+          } else {
+            if (window[timerName]) {
+              clearTimeout(window[timerName]);
+              window[timerName] = null;
+            }
+          }
+        };
+      }
+
+      // --------- 플레이 버튼 ---------
+      playA.addEventListener("click", () => {
+        ensureAudioContext();
+        if (!isPlayingA) {
+          audioA.play();
+          isPlayingA = true;
+          playA.classList.add("playing");
+          playA.textContent = "⏸";
+        } else {
+          audioA.pause();
+          isPlayingA = false;
+          playA.classList.remove("playing");
+          playA.textContent = "▶";
+
+          if (awaitingStopA) {
+            awaitingStopA = false;
+            showTutorialStep(9);
           }
         }
+      });
 
-        audioB.play();
-        isPlayingB = true;
-        playB.classList.add("playing");
-        playB.textContent = "⏸";
+      playB.addEventListener("click", async () => {
+        ensureAudioContext();
+        const T = STRINGS[currentLang].toasts;
 
-        if (awaitingSyncPlay) {
-          awaitingSyncPlay = false;
-          const T = STRINGS[currentLang].toasts;
-          showToast(T.syncDone);
-          await sleep(1000);
-          showTutorialStep(6);
+        if (!isPlayingB) {
+          if (awaitingSyncPlay) {
+            audioA.currentTime = A_FLAG;
+            audioB.currentTime = B_START;
+
+            if (!isPlayingA) {
+              audioA.play();
+              isPlayingA = true;
+              playA.classList.add("playing");
+              playA.textContent = "⏸";
+            }
+          }
+
+          audioB.play();
+          isPlayingB = true;
+          playB.classList.add("playing");
+          playB.textContent = "⏸";
+
+          if (awaitingSyncPlay) {
+            awaitingSyncPlay = false;
+            showToast(T.syncDone);
+            await sleep(1000);
+            showTutorialStep(6);
+          }
+        } else {
+          audioB.pause();
+          isPlayingB = false;
+          playB.classList.remove("playing");
+          playB.textContent = "▶";
         }
-      } else {
-        audioB.pause();
-        isPlayingB = false;
-        playB.classList.remove("playing");
-        playB.textContent = "▶";
-      }
-    });
+      });
 
+      // --------- 슬라이더 이벤트 ---------
+      const checkVolAStable = makeStableChecker(
+        "volAStableTimer",
+        () => awaitingVolumeFade && Number(volA.value) === 0,
+        () => {
+          awaitingVolumeFade = false;
+          const T = STRINGS[currentLang].toasts;
+          playA.classList.add("highlight-control");
+          awaitingStopA = true;
+          showToast(T.volAStop);
+        }
+      );
 
-    // --------- 슬라이더 이벤트 ---------
+      volA.addEventListener("input", () => {
+        updateVolumesFromSliders();
+        checkVolAStable();
+      });
 
-    // A 볼륨: 0까지 내려간 상태 유지
-    const checkVolAStable = makeStableChecker(
-      "volAStableTimer",
-      () => awaitingVolumeFade && Number(volA.value) === 0,
-      () => {
-        awaitingVolumeFade = false;
+      const checkVolBStable = makeStableChecker(
+        "volBStableTimer",
+        () => awaitingBVolumeRaise && Number(volB.value) === 100,
+        async () => {
+          awaitingBVolumeRaise = false;
+          volB.classList.remove("highlight-control");
+          const T = STRINGS[currentLang].toasts;
+          showToast(T.volBDone);
+          await sleep(1000);
+          showTutorialStep(7);
+        }
+      );
+
+      volB.addEventListener("input", () => {
+        updateVolumesFromSliders();
+        checkVolBStable();
+      });
+
+      const checkBpmStable = makeStableChecker(
+        "bpmStableTimer",
+        () => awaitingBpm && Number(bpmB.value) === 131,
+        async () => {
+          awaitingBpm = false;
+          const T = STRINGS[currentLang].toasts;
+          showToast(T.bpmPerfect);
+          await sleep(1000);
+          showTutorialStep(5);
+        }
+      );
+
+      bpmB.addEventListener("input", (e) => {
+        const bpmValue = Number(e.target.value);
+        bpmBVal.textContent = bpmValue;
+        checkBpmStable();
+      });
+
+      const eqFullyUp = (val) => Number(val) >= 10;
+
+      const checkHighStable = makeStableChecker(
+        "eqHighStableTimer",
+        () => eqPhase === "high" && eqFullyUp(eqHigh.value),
+        () => {
+          eqRowHigh.classList.remove("eq-highlight");
+          eqRowMid.classList.add("eq-highlight");
+          eqPhase = "mid";
+          const T = STRINGS[currentLang].toasts;
+          showToast(T.eqHigh);
+        }
+      );
+
+      const checkMidStable = makeStableChecker(
+        "eqMidStableTimer",
+        () => eqPhase === "mid" && eqFullyUp(eqMid.value),
+        () => {
+          eqRowMid.classList.remove("eq-highlight");
+          eqRowLow.classList.add("eq-highlight");
+          eqPhase = "low";
+          const T = STRINGS[currentLang].toasts;
+          showToast(T.eqMid);
+        }
+      );
+
+      const checkLowStable = makeStableChecker(
+        "eqLowStableTimer",
+        () => eqPhase === "low" && eqFullyUp(eqLow.value),
+        async () => {
+          eqRowLow.classList.remove("eq-highlight");
+          eqPhase = "done";
+          const T = STRINGS[currentLang].toasts;
+          showToast(T.eqLow);
+          await sleep(1000);
+          showTutorialStep(8);
+        }
+      );
+
+      eqHigh.addEventListener("input", () => {
+        updateEqDisplays();
+        applyEq();
+        checkHighStable();
+      });
+
+      eqMid.addEventListener("input", () => {
+        updateEqDisplays();
+        applyEq();
+        checkMidStable();
+      });
+
+      eqLow.addEventListener("input", () => {
+        updateEqDisplays();
+        applyEq();
+        checkLowStable();
+      });
+
+      // --------- 튜토리얼 버튼 ---------
+      overlayNext.addEventListener("click", () => {
+        ensureAudioContext();
         const T = STRINGS[currentLang].toasts;
-        playA.classList.add("highlight-control");
-        awaitingStopA = true;
-        showToast(T.volAStop);
-      }
-    );
 
-    volA.addEventListener("input", () => {
-      updateVolumesFromSliders();
-      checkVolAStable();
-    });
+        if (tutorialStep === 1) {
+          resetAudioState();
+          resetControlState();
+          startBaseTrack();
+          showTutorialStep(2);
+        } else if (tutorialStep === 2) {
+          showTutorialStep(3);
+        } else if (tutorialStep === 3) {
+          showTutorialStep(4);
+        } else if (tutorialStep === 4) {
+          hideTutorial();
+          awaitingBpm = true;
+          deckB.classList.add("highlight");
+          showToast(T.bpmAsk);
+        } else if (tutorialStep === 5) {
+          hideTutorial();
+          awaitingSyncPlay = true;
+          waveA.classList.add("wave-highlight");
+          waveB.classList.add("wave-highlight");
+          playB.classList.add("highlight-control");
+          showToast(T.syncHint);
+        } else if (tutorialStep === 6) {
+          hideTutorial();
+          awaitingBVolumeRaise = true;
+          volB.classList.add("highlight-control");
+          showToast(T.volBAsk);
+        } else if (tutorialStep === 7) {
+          hideTutorial();
+          eqPhase = "high";
+          eqRowHigh.classList.add("eq-highlight");
+        } else if (tutorialStep === 8) {
+          hideTutorial();
+          awaitingVolumeFade = true;
+          deckA.classList.add("highlight");
+          showToast(T.volAFade);
+        } else if (tutorialStep === 9) {
+          hideTutorial();
+        }
+      });
 
-    // B 볼륨: 100까지 올린 상태 유지
-    const checkVolBStable = makeStableChecker(
-      "volBStableTimer",
-      () => awaitingBVolumeRaise && Number(volB.value) === 100,
-      async () => {
-        awaitingBVolumeRaise = false;
-        volB.classList.remove("highlight-control");
+      startTutorialTop.addEventListener("click", () => {
         const T = STRINGS[currentLang].toasts;
-        showToast(T.volBDone);
-        await sleep(1000)
-        showTutorialStep(7);
-      }
-    );
-
-    volB.addEventListener("input", () => {
-      updateVolumesFromSliders();
-      checkVolBStable();
-    });
-
-    const checkBpmStable = makeStableChecker(
-      "bpmStableTimer",
-      () => awaitingBpm && Number(bpmB.value) === 131,
-      async () => {
-        awaitingBpm = false;
-        const T = STRINGS[currentLang].toasts;
-        showToast(T.bpmPerfect);
-        await sleep(1000);
-        showTutorialStep(5);
-      }
-    );
-
-    bpmB.addEventListener("input", (e) => {
-      const bpmValue = Number(e.target.value);
-      bpmBVal.textContent = bpmValue;
-      // 실제 오디오 재생 속도는 이미 131 BPM으로 렌더링되어 있어서
-      // 슬라이더는 '연습용' UI일 뿐입니다 :)
-      checkBpmStable();
-    });
-
-    // EQ thresholds: 최댓값(10)까지 올린 상태
-    function eqFullyUp(val) {
-      return Number(val) >= 10;
-    }
-
-    const checkHighStable = makeStableChecker(
-      "eqHighStableTimer",
-      () => eqPhase === "high" && eqFullyUp(eqHigh.value),
-      () => {
-        eqRowHigh.classList.remove("eq-highlight");
-        eqRowMid.classList.add("eq-highlight");
-        eqPhase = "mid";
-        const T = STRINGS[currentLang].toasts;
-        showToast(T.eqHigh);
-      }
-    );
-
-    const checkMidStable = makeStableChecker(
-      "eqMidStableTimer",
-      () => eqPhase === "mid" && eqFullyUp(eqMid.value),
-      () => {
-        eqRowMid.classList.remove("eq-highlight");
-        eqRowLow.classList.add("eq-highlight");
-        eqPhase = "low";
-        const T = STRINGS[currentLang].toasts;
-        showToast(T.eqMid);
-      }
-    );
-
-    const checkLowStable = makeStableChecker(
-      "eqLowStableTimer",
-      () => eqPhase === "low" && eqFullyUp(eqLow.value),
-      async () => {
-        eqRowLow.classList.remove("eq-highlight");
-        eqPhase = "done";
-        const T = STRINGS[currentLang].toasts;
-        showToast(T.eqLow);
-        await sleep(1000);
-        showTutorialStep(8);
-      }
-    );
-
-    eqHigh.addEventListener("input", () => {
-      updateEqDisplays();
-      applyEq();
-      checkHighStable();
-    });
-
-    eqMid.addEventListener("input", () => {
-      updateEqDisplays();
-      applyEq();
-      checkMidStable();
-    });
-
-    eqLow.addEventListener("input", () => {
-      updateEqDisplays();
-      applyEq();
-      checkLowStable();
-    });
-
-    // --------- 튜토리얼 버튼 ---------
-    overlayNext.addEventListener("click", () => {
-      ensureAudioContext();
-      const T = STRINGS[currentLang].toasts;
-
-      if (tutorialStep === 1) {
+        showToast(T.restartTop);
         resetAudioState();
         resetControlState();
-        startBaseTrack();
-        showTutorialStep(2);
-      } else if (tutorialStep === 2) {
-        showTutorialStep(3);
-      } else if (tutorialStep === 3) {
-        showTutorialStep(4);
-      } else if (tutorialStep === 4) {
-          hideTutorial();
-        awaitingBpm = true;
-        deckB.classList.add("highlight");
-        // BPM 맞추는 단계 시작
-        showToast(T.bpmAsk);
-      } else if (tutorialStep === 5) {
-        // 타이밍 맞춰 B 시작
-        hideTutorial();
-        awaitingSyncPlay = true;
-        waveA.classList.add("wave-highlight");
-        waveB.classList.add("wave-highlight");
-        playB.classList.add("highlight-control");
-        showToast(T.syncHint);
-      } else if (tutorialStep === 6) {
-        // B 볼륨 올리기 시작
-        hideTutorial();
-        awaitingBVolumeRaise = true;
-        volB.classList.add("highlight-control");
-        showToast(T.volBAsk);
-      } else if (tutorialStep === 7) {
-        // EQ 단계
-        hideTutorial();
-        eqPhase = "high";
-        eqRowHigh.classList.add("eq-highlight");
-      } else if (tutorialStep === 8) {
-        // A 볼륨 페이드 단계
-        hideTutorial();
-        awaitingVolumeFade = true;
-        deckA.classList.add("highlight");
-        showToast(T.volAFade);
-      } else if (tutorialStep === 9) {
-        hideTutorial();
+        showTutorialStep(1);
+      });
+
+      // --------- 언어 스위치 이벤트 ---------
+      langKoBtn.addEventListener("click", () => setLanguage("ko"));
+      langEnBtn.addEventListener("click", () => setLanguage("en"));
+
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
       }
-    });
 
-    overlaySkip.addEventListener("click", () => {
-      hideTutorial();
-      const T = STRINGS[currentLang].toasts;
-      showToast(T.skipOverlay);
-    });
+      // --------- 초기 세팅 ---------
+      function init() {
+        updateVolumesFromSliders();
+        updateBpmDisplay();
+        updateEqDisplays();
+        applyEq();
+        setLanguage("ko");
+        showTutorialStep(1);
+      }
 
-    startTutorialTop.addEventListener("click", () => {
-      const T = STRINGS[currentLang].toasts;
-      showToast(T.skipTop);
-
-      resetAudioState();
-      resetControlState();
-      showTutorialStep(1);
-    });
-
-    // --------- 언어 스위치 이벤트 ---------
-    langKoBtn.addEventListener("click", () => setLanguage("ko"));
-    langEnBtn.addEventListener("click", () => setLanguage("en"));
-
-    // --------- 초기 세팅 ---------
-    function init() {
-      updateVolumesFromSliders();
-      updateBpmDisplay();
-      updateEqDisplays();
-      applyEq();
-      setLanguage("ko");
-      showTutorialStep(1);
-    }
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    window.addEventListener("load", init);
+      window.addEventListener("load", init);
+    })();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
